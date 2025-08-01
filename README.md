@@ -34,13 +34,35 @@ Before using these prompt packs, ensure you have access to the following:
 - Knowledge of positive/negative testing scenarios
 - SQA test case import functionality
 
-### 2. **Key Impact Analyzer Prompt** (`Key_Impact_Analyzer_Prompt.md`)
-**Purpose**: Analyze code changes impact by comparing latest release branch with existing regression test cases, generating new test requirements for SQA.
+### 2. **Release Branch Impact Analyzer Prompt** (`Key_Impact_Analyzer_Prompt.md`)
+**Purpose**: Compare two release branches to analyze code changes and their impact on existing regression test coverage. Generate comprehensive impact analysis and identify new test cases required for SQA execution.
+
+**🔒 READ ONLY ACCESS**: This analyzer will ONLY READ your code - NO commits, NO code changes, NO modifications will be made!
+
+**🎯 What This Tool Does**:
+- **Compares two release branches** to identify code differences
+- **Analyzes impact** on existing regression test coverage  
+- **Generates new test cases** in SQA-compatible CSV format
+- **Provides risk assessment** and testing recommendations
+- **Creates actionable reports** for QA teams
+
+**📁 User-Friendly Input - Just Provide**:
+```
+Branch 1 (Base/Previous Release): [Folder Name]
+Branch 2 (New/Current Release): [Folder Name] 
+Regression Test File: [CSV File Name]
+```
+
+**📤 Output Files Generated**:
+1. **📊 Impact_Analysis_Report_[Timestamp].md** - Comprehensive impact analysis with specific affected test case IDs
+2. **📝 New_Test_Cases_Impact_[Timestamp].csv** - New test cases in SQA-compatible format
+3. **📋 Affected_Test_Cases_Summary.csv** - List of existing test case IDs that are impacted
+
 **Essential Requirements**:
-- Access to latest release branch and code change documentation
-- Existing regression test suite in CSV or SQA format
-- Understanding of SQA impact analysis and test case management
-- Knowledge of application architecture and component dependencies
+- Two release branch folders in your workspace (any naming convention)
+- Existing regression test suite exported as CSV from SQA
+- READ ONLY permission for code analysis (no modifications made)
+- Understanding of SQA test case import functionality
 
 ### 3. **UI Object Extractor Prompt** (`UI_Object_Extractor_Prompt.md`)
 **Purpose**: Extract UI elements and their properties (XPath, CSS selectors) in CSV format for new pages or enhanced features based on JIRA tickets and latest code.
@@ -93,9 +115,14 @@ Before using this prompt, review and update the naming conventions if needed:
 ## Why Use These Prompts?
 
 - **Ready for SQA**: All outputs are in CSV format for direct SQA import
-- **Save Time**: Automated test generation reduces manual work
+- **Save Time**: Automated test generation and impact analysis reduces manual work
+- **Intelligent Analysis**: AI-powered mapping of code changes to specific test cases
+- **User-Friendly**: Simple input requirements - just provide folder names and file names
+- **Comprehensive Reports**: Detailed markdown reports with actionable recommendations
+- **Risk Assessment**: Prioritized impact levels (Critical, High, Medium, Low)
 - **Consistent Format**: Standardized structure across all test types
 - **Easy Integration**: Seamless workflow with SQA platform
+- **READ ONLY Safety**: Impact analysis never modifies your code
 
 ## 🎯 UI Element Extraction Priority
 
@@ -106,11 +133,29 @@ Before using this prompt, review and update the naming conventions if needed:
 
 ## Simple Workflow
 
-1. **Choose your prompt** based on what you need (test cases, UI elements, or impact analysis)
-2. **Gather your inputs** (JIRA tickets, code info, etc.)
-3. **Copy the prompt** into GitHub Copilot Chat
-4. **Provide context** and generate CSV output
-5. **Import to SQA** and run your tests
+1. **Choose your prompt** based on what you need:
+   - **Test Generation**: JIRA TestCase Generation for new features
+   - **Impact Analysis**: Release Branch Impact Analyzer for code changes
+   - **UI Elements**: Object Extractor (try Web Recorder first!)
+   - **Regression Scope**: Regression Scope Analysis for existing tests
+
+2. **Gather your inputs**:
+   - **For Impact Analysis**: Two branch folder names + regression CSV file
+   - **For Test Generation**: JIRA tickets, requirements, etc.
+   - **For UI Elements**: JIRA tickets + code access (or use Web Recorder)
+
+3. **Provide simple context** - just tell the tool what you need:
+   ```
+   Hi! I need to analyze impact between Release_Branch_A and Release_Branch_B folders. 
+   My regression test file is called Regression_80_Test.csv.
+   ```
+
+4. **Get comprehensive outputs**:
+   - Detailed markdown reports with specific test case IDs
+   - SQA-compatible CSV files ready for import
+   - Risk assessments and actionable recommendations
+
+5. **Import to SQA** and execute your optimized test strategy
 
 ## SQA Integration
 
@@ -154,6 +199,16 @@ I need to generate test cases for:
 - Feature: User Login Page
 
 Please generate CSV output for SQA import.
+```
+
+### **For Release Branch Impact Analysis:**
+```
+Hi! Please analyze these branches:
+- Old Release: ProjectA_Release_v1.2
+- New Release: ProjectA_Release_v1.3  
+- Test File: Regression_80_Test.csv
+
+Focus on payment and authentication modules.
 ```
 
 ### **For Regression Scope Analysis:**
