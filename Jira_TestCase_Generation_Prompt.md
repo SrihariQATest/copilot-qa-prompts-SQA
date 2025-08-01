@@ -1,7 +1,7 @@
 # Jira Ticket to Test Cases Generation Prompt
 
 ## Objective
-Generate high-quality manual test cases and export them to a CSV file using the TestcaseTemplate.csv format.
+Generate high-quality manual test cases and export them to a CSV file using the Below format for the respective Jira Ticket.
 
 ## **Template Structure**
 The CSV file must follow this exact structure with the following columns:
