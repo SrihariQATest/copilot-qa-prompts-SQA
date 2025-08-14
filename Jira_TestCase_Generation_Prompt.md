@@ -12,7 +12,7 @@ The CSV file must follow this exact structure with the following columns:
 
 | Column Name | Requirement | Instructions |
 |-------------|-------------|-------------|
-| **LogicalName** | **Mandatory** | A clear and unique test case name that describes the test scenario. Format adapts based on test type: "API_Verify [Jira Ticket ID] [method] [condition]" for API tests, "DB_Test [Jira Ticket ID] [operation] [condition]" for database tests, "Verify [Jira Ticket ID] [functionality] [condition]" for functional tests. Examples: "API_Verify TICKET-123 POST with valid credentials", "DB_Test TICKET-123 user insertion with valid data", "Verify TICKET-123 login functionality with valid credentials"|
+| **LogicalName** | **Mandatory** | A clear and unique test case name that describes the test scenario. Format adapts based on test type: "Verify [Jira Ticket ID] API_[method] [condition]" for API tests, "Verify [Jira Ticket ID] DB_Test [operation] [condition]" for database tests, "Verify [Jira Ticket ID] [functionality] [condition]" for functional tests. Examples: "Verify TICKET-123 API_POST with valid credentials", "Verify TICKET-123 DB_Test user insertion with valid data", "Verify TICKET-123 login functionality with valid credentials"|
 | **Version** | **Mandatory** | Set this as "1" for all test cases |
 | **Prerequisite** | Optional | Extract setup requirements from Jira ticket description, acceptance criteria, and requirements. Include environment setup, test data, user accounts, or specific configurations needed |
 | **UserStory_Name** | Optional | Leave blank |
@@ -54,7 +54,10 @@ LogicalName,Version,Prerequisite,UserStory_Name,Module_Name,Description,Labels,S
 - **Adapt to test type** - Automatically detect test type from Jira ticket content and adapt test case format accordingly:
   - **API Testing**: Focus on endpoints, HTTP methods, request/response validation
   - **Database Testing**: Focus on CRUD operations, data integrity, constraints
-  - **Functional Testing**: Focus on user workflows, business logic, UI interactions
+  - **Functional/UI Testing**: Focus on user workflows, business logic, UI interactions
+    - **MANDATORY**: Always include login as step 1 (unless testing login functionality itself)
+    - **MANDATORY**: Always include logout as the final step
+    - Include complete user journey from login to logout
   - **Performance Testing**: Focus on load conditions, response times, scalability
 - **Focus on functional requirements** - Base test cases on core functionality and user workflows specified in the ticket
 - **Ensure acceptance criteria coverage** - Prioritize test cases that directly validate the acceptance criteria and main functionality
@@ -64,8 +67,12 @@ LogicalName,Version,Prerequisite,UserStory_Name,Module_Name,Description,Labels,S
 ### Intelligent Test Step Format
 
 - **API Tests**: Include HTTP method, endpoint, headers, request body, and response validation
-- **Database Tests**: Include SQL operations, data setup, integrity checks, and result validation  
-- **Functional Tests**: Include UI navigation, data entry, user interactions, and workflow validation
+- **Database Tests**: Include SQL operations, data setup, integrity checks, and result validation
+- **Functional/UI Tests**:
+  - **ALWAYS include login as first step** (unless testing login itself): "1. Login to the application with valid credentials"
+  - Include UI navigation, data entry, user interactions, and workflow validation
+  - **ALWAYS include logout as final step**: "X. Logout from the application"
+  - Be specific about UI elements, buttons, fields, and expected states
 - **Performance Tests**: Include load parameters, monitoring points, and performance criteria
 - Write clear, actionable steps that any tester can follow
 - Each step should have a corresponding expected result
@@ -73,25 +80,25 @@ LogicalName,Version,Prerequisite,UserStory_Name,Module_Name,Description,Labels,S
 
 ### Smart Naming Convention
 
-- **API Tests**: "API_Verify [endpoint] [HTTP method] [condition]" or "API_Test [functionality] with [scenario]"
-- **Database Tests**: "DB_Verify [operation] [table/entity] [condition]" or "DB_Test [functionality] with [scenario]"
-- **Functional Tests**: "Verify [functionality] [condition]" or "Test [feature] with [scenario]"
-- **Performance Tests**: "PERF_Test [functionality] [load condition]" or "PERF_Verify [metric] [scenario]"
-- **Examples:** 
-  - "API_Verify user login POST with valid credentials"
-  - "DB_Test user insertion with valid data"
-  - "Verify login functionality with valid credentials"
-  - "PERF_Test login under normal load"
+- **API Tests**: "Verify [Jira Ticket ID] API_[HTTP method] [condition]" or "Verify [Jira Ticket ID] API_[functionality] with [scenario]"
+- **Database Tests**: "Verify [Jira Ticket ID] DB_[operation] [table/entity] [condition]" or "Verify [Jira Ticket ID] DB_Test [functionality] with [scenario]"
+- **Functional Tests**: "Verify [Jira Ticket ID] [functionality] [condition]" or "Verify [Jira Ticket ID] [feature] with [scenario]"
+- **Performance Tests**: "Verify [Jira Ticket ID] PERF_[functionality] [load condition]" or "Verify [Jira Ticket ID] PERF_[metric] [scenario]"
+- **Examples:**
+  - "Verify TICKET-123 API_POST user login with valid credentials"
+  - "Verify TICKET-123 DB_Test user insertion with valid data"
+  - "Verify TICKET-123 login functionality with valid credentials"
+  - "Verify TICKET-123 PERF_login under normal load"
 
 ## **Example Output Format - [SAMPLE CSV]:**
 
 ```csv
 LogicalName,Version,Prerequisite,UserStory_Name,Module_Name,Description,Labels,Suite_Name,StepDescription,ExpectedResult,Parameter,qTest Req Reference,Is Automated?
 (Mandatory),(Mandatory),,,(Mandatory),,,,(Mandatory),(Mandatory),,,(Mandatory)
-Verify user login with valid credentials,1,User account exists in system,,test,Validate successful login process with correct credentials,,,1. Navigate to login page,Login page should be displayed,,,No
-,,,,,,,,2. Enter valid username and password,Username and password fields should accept the input,,,
-,,,,,,,,3. Click on Login button,User should be successfully logged in and redirected to dashboard,,,
-Verify error handling for invalid login,1,,,test,Validate error message display for incorrect credentials,,,1. Navigate to login page,Login page should be displayed,,,No
+Verify TICKET-123 login functionality with valid credentials,1,User account exists in system,,test,Validate successful login process with correct credentials,,,1. Login to the application with valid credentials,User should be successfully logged in and redirected to dashboard,,,No
+,,,,,,,,2. Navigate to user profile page,Profile page should be displayed with user information,,,
+,,,,,,,,3. Logout from the application,User should be successfully logged out and redirected to login page,,,
+Verify TICKET-123 login functionality with invalid credentials,1,,,test,Validate error message display for incorrect credentials,,,1. Navigate to login page,Login page should be displayed,,,No
 ,,,,,,,,2. Enter invalid username and password,Username and password fields should accept the input,,,
 ,,,,,,,,3. Click on Login button,Error message should be displayed indicating invalid credentials,,,
 ```
